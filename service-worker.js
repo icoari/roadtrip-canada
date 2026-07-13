@@ -1,4 +1,4 @@
-const CACHE = 'roadtrip-v4';
+const CACHE = 'roadtrip-v5';
 const ASSETS = [
   './',
   './index.html',
@@ -15,9 +15,9 @@ const ASSETS = [
   './fonts/SpaceMono-normal-700-latin.woff2',
   './fonts/SpaceMono-normal-700-latin-ext.woff2',
   './icons/icon.svg',
-  './icons/icon-180.png',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
+  './icons/icon-180-v3.png',
+  './icons/icon-192-v3.png',
+  './icons/icon-512-v3.png',
 ];
 
 self.addEventListener('install', (e) => {
