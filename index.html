@@ -9,9 +9,13 @@
 <meta property="og:title" content="Road trip Canada — Août · le carnet">
 <meta property="og:description" content="16 jours, ~2 400 km — de Montréal aux baleines de Tadoussac et aux chutes du Niagara.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🍁%3C/text%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Instrument+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<!-- Polices auto-hébergées (latin + latin-ext) — le carnet reste identique hors connexion -->
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Canada">
 <style>
 *{box-sizing:border-box}
 :root{
@@ -214,6 +218,13 @@ a{color:inherit}
 .foot__moose{font-size:30px}
 .foot p{font-family:"Space Mono",monospace; font-size:13px; color:var(--slate); margin:10px 0 0}
 
+/* OFFLINE */
+body.offline .mapbox{display:none}
+.offchip{display:none; font-family:"Space Mono",monospace; font-size:10px; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--paper); background:var(--slate); border-radius:999px;
+  padding:4px 10px; white-space:nowrap; flex:0 0 auto}
+body.offline .offchip{display:inline-block}
+
 /* MAPS PROVIDER TOGGLE */
 .mapsel{margin-left:auto; display:inline-flex; align-items:center; gap:0; flex:0 0 auto;
   border:1px solid var(--line); border-radius:999px; overflow:hidden; background:var(--paper)}
@@ -283,6 +294,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var
 <nav class="topnav"><div class="topnav__in">
   <span class="topnav__brand">🍁 Canada · Août</span>
   <a href="#montreal" class="jump">Montréal</a><a href="#quebec" class="jump">Québec</a><a href="#charlevoix" class="jump">Charlevoix</a><a href="#tadoussac" class="jump">Tadoussac</a><a href="#fjord" class="jump">Fjord du Saguenay</a><a href="#trois-rivieres" class="jump">Trois-Rivières</a><a href="#ottawa" class="jump">Ottawa</a><a href="#toronto" class="jump">Toronto</a><a href="#gananoque" class="jump">Mille-Îles</a><a href="#retour" class="jump">Retour</a>
+  <span class="offchip" aria-live="polite">Hors ligne</span>
   <span class="mapsel" role="group" aria-label="Application de cartes pour les liens">
     <button type="button" data-maps="om">Organic</button>
     <button type="button" data-maps="g">Google</button>
@@ -752,6 +764,21 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var
 <script>
 const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// Hors connexion : service worker (cache complet du carnet + polices) et
+// masquage des mini-cartes Google (réseau requis). Les liens Organic Maps,
+// eux, fonctionnent hors-ligne par nature.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+  });
+}
+(function(){
+  function setOffline(){ document.body.classList.toggle('offline', !navigator.onLine); }
+  window.addEventListener('online', setOffline);
+  window.addEventListener('offline', setOffline);
+  setOffline();
+})();
 
 // Scroll-spy : le lien de nav de l'étape visible reste surligné.
 (function(){
