@@ -218,6 +218,36 @@ a{color:inherit}
 .foot__moose{font-size:30px}
 .foot p{font-family:"Space Mono",monospace; font-size:13px; color:var(--slate); margin:10px 0 0}
 
+/* AIDE-MÉMOIRE */
+.memo{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+@media (max-width:820px){.memo{grid-template-columns:1fr}}
+.fx__now{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap}
+.fx__rate{font-family:"Fraunces",serif; font-weight:600; font-size:clamp(30px,5vw,42px); line-height:1}
+.fx__unit{font-family:"Space Mono",monospace; font-size:12px; color:var(--slate)}
+.fx__stamp{font-family:"Space Mono",monospace; font-size:10.5px; color:var(--slate); margin-left:auto}
+.fx__delta{display:flex; align-items:center; gap:8px; margin-top:12px; padding:10px 12px; border-radius:10px; font-size:14px; line-height:1.45}
+.fx__delta--up{background:#eaf3ec; border:1px solid #cfe3d5; color:var(--green)}
+.fx__delta--down{background:#f7e4e1; border:1px solid #eec3bc; color:var(--red)}
+.fx__delta--flat{background:#eef2f0; border:1px solid var(--line); color:var(--slate)}
+.fx__delta b{font-family:"Space Mono",monospace}
+.fx__ref{font-size:12px; color:var(--slate); margin:10px 0 0}
+.fx__err{font-size:12.5px; color:var(--slate); font-style:italic; margin-top:10px}
+.tips{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px}
+.tips li{display:flex; gap:10px; font-size:14.5px; line-height:1.5}
+.tips li b{font-family:"Space Mono",monospace; font-size:12.5px; flex:0 0 auto; color:var(--pine); min-width:74px}
+
+/* MODE VOYAGE : étape du jour */
+.stage--today{scroll-margin-top:70px}
+.stage--today .stage__rail{position:relative}
+.today-badge{display:inline-flex; align-items:center; gap:5px; font-family:"Space Mono",monospace;
+  font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+  color:#fff; background:var(--amber); border-radius:999px; padding:3px 10px; margin:8px 0 0}
+.jump--today::after{content:"·"; color:var(--amber); font-weight:700; margin-left:3px}
+.hero__today{display:inline-flex; align-items:center; gap:8px; margin:14px 0 0;
+  font-family:"Space Mono",monospace; font-size:12.5px; font-weight:700; color:var(--pine);
+  background:var(--paper); border:1px solid var(--line); border-radius:999px; padding:7px 14px}
+.hero__today b{color:var(--amber)}
+
 /* OFFLINE */
 body.offline .mapbox{display:none}
 .offchip{display:none; font-family:"Space Mono",monospace; font-size:10px; letter-spacing:.06em;
@@ -293,7 +323,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var
 
 <nav class="topnav"><div class="topnav__in">
   <span class="topnav__brand">🍁 Canada · Août</span>
-  <a href="#montreal" class="jump">Montréal</a><a href="#quebec" class="jump">Québec</a><a href="#charlevoix" class="jump">Charlevoix</a><a href="#tadoussac" class="jump">Tadoussac</a><a href="#fjord" class="jump">Fjord du Saguenay</a><a href="#trois-rivieres" class="jump">Trois-Rivières</a><a href="#ottawa" class="jump">Ottawa</a><a href="#toronto" class="jump">Toronto</a><a href="#gananoque" class="jump">Mille-Îles</a><a href="#retour" class="jump">Retour</a>
+  <a href="#montreal" class="jump">Montréal</a><a href="#quebec" class="jump">Québec</a><a href="#charlevoix" class="jump">Charlevoix</a><a href="#tadoussac" class="jump">Tadoussac</a><a href="#fjord" class="jump">Fjord du Saguenay</a><a href="#trois-rivieres" class="jump">Trois-Rivières</a><a href="#ottawa" class="jump">Ottawa</a><a href="#toronto" class="jump">Toronto</a><a href="#gananoque" class="jump">Mille-Îles</a><a href="#retour" class="jump">Retour</a><a href="#memo" class="jump">Sur place</a><a href="#prix" class="jump">Budget</a>
   <span class="offchip" aria-live="polite">Hors ligne</span>
   <span class="mapsel" role="group" aria-label="Application de cartes pour les liens">
     <button type="button" data-maps="om">Organic</button>
@@ -740,6 +770,31 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var
 </section>
   </div>
 
+  <div class="shead" id="memo"><span class="shead__k">Sur place</span><h2>Aide-mémoire</h2></div>
+  <div class="memo">
+    <div class="panel">
+      <h3>Le dollar canadien, en direct</h3>
+      <div class="fx__now">
+        <span class="fx__rate" id="fxRate">—</span>
+        <span class="fx__unit">CAD pour 1 €</span>
+        <span class="fx__stamp" id="fxStamp"></span>
+      </div>
+      <div id="fxDelta"></div>
+      <p class="fx__ref">Référence : 1,6148 CAD au 13 juillet (période de réservation). Un euro plus fort = ton pouvoir d'achat monte sur place.</p>
+    </div>
+    <div class="panel">
+      <h3>Les réflexes du voyageur</h3>
+      <ul class="tips">
+        <li><b>Pourboire</b><span>15 % au resto (18-20 % si nickel), taxi ~15 %. Souvent proposé au terminal de paiement.</span></li>
+        <li><b>Taxes</b><span>Les prix affichés sont <em>hors taxes</em> : +14,975 % au Québec, +13 % en Ontario. Normal que l'addition gonfle.</span></li>
+        <li><b>Urgences</b><span>911 partout. Indicatif du Canada : +1.</span></li>
+        <li><b>Heure</b><span>Québec/Ontario = Paris −6 h (14 h à Paris → 8 h à Montréal).</span></li>
+        <li><b>Route</b><span>Vitesses en km/h, essence au litre (payer à la pompe : code postal parfois demandé → passer par le caissier).</span></li>
+        <li><b>Réseau</b><span>Ce carnet et Organic Maps marchent hors connexion — le Wi-Fi des hôtels suffit pour le reste.</span></li>
+      </ul>
+    </div>
+  </div>
+
   <div class="shead" id="prix"><span class="shead__k">Le budget</span><h2>Récap des prix</h2></div>
 
     <div class="panel recap">
@@ -764,6 +819,74 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var
 <script>
 const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// ---- Taux EUR→CAD en direct (BCE via frankfurter, sans clé) ----
+// Cache localStorage pour l'affichage hors connexion ; comparaison au taux
+// de la période de réservation pour un verdict gagnant/perdant concret.
+(function(){
+  const REF = 1.6148;   // BCE, 13 juillet 2026 — période de réservation
+  const rateEl=document.getElementById('fxRate');
+  const stampEl=document.getElementById('fxStamp');
+  const deltaEl=document.getElementById('fxDelta');
+  if(!rateEl) return;
+  function fr(n,d){ return n.toFixed(d).replace('.', ','); }
+  function render(rate, date, cached){
+    rateEl.textContent = fr(rate,4);
+    stampEl.textContent = (cached ? 'hors ligne · ' : 'BCE · ') +
+      new Date(date+'T12:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'short'});
+    const diff = (rate - REF) / REF * 100;
+    const g1000 = Math.round((rate - REF) * 1000);
+    let cls, txt;
+    if (diff > 0.15){ cls='up'; txt=`L'euro a pris <b>+${fr(diff,1)} %</b> depuis la réservation : ~<b>${g1000} CAD</b> de plus pour 1 000 € échangés. Vous êtes gagnants 🎉`; }
+    else if (diff < -0.15){ cls='down'; txt=`L'euro a perdu <b>${fr(diff,1)} %</b> depuis la réservation : ~<b>${Math.abs(g1000)} CAD</b> de moins pour 1 000 € échangés.`; }
+    else { cls='flat'; txt=`Quasi stable par rapport à la réservation (${diff>=0?'+':''}${fr(diff,1)} %). Ni gagné ni perdu.`; }
+    deltaEl.innerHTML = `<div class="fx__delta fx__delta--${cls}"><span>${txt}</span></div>`;
+  }
+  let cached=null;
+  try{ cached=JSON.parse(localStorage.getItem('fx-eurcad')||'null'); }catch{}
+  if(cached && cached.rate) render(cached.rate, cached.date, true);
+  fetch('https://api.frankfurter.dev/v1/latest?base=EUR&symbols=CAD')
+    .then(r=>r.json())
+    .then(d=>{
+      const rate=d && d.rates && d.rates.CAD;
+      if(!rate) throw new Error('no rate');
+      render(rate, d.date, false);
+      try{ localStorage.setItem('fx-eurcad', JSON.stringify({rate, date:d.date})); }catch{}
+    })
+    .catch(()=>{
+      if(!cached) deltaEl.innerHTML='<p class="fx__err">Taux indisponible hors connexion — il s’affichera à la prochaine ouverture en ligne.</p>';
+    });
+})();
+
+// ---- Mode voyage : pendant le séjour, le carnet sait quel jour on est ----
+(function(){
+  const STAGES=[['montreal',11,13],['quebec',14,15],['charlevoix',16,16],['tadoussac',17,18],
+    ['fjord',19,19],['trois-rivieres',20,20],['ottawa',21,21],['toronto',22,24],
+    ['gananoque',25,25],['retour',26,26]];
+  const now=new Date();
+  if(now.getFullYear()!==2026 || now.getMonth()!==7) return;   // août 2026 uniquement
+  const day=now.getDate();
+  if(day<11 || day>26) return;
+  const cur=STAGES.find(([,a,b])=>day>=a&&day<=b);
+  if(!cur) return;
+  const stage=document.getElementById(cur[0]);
+  if(!stage) return;
+  // Héro : pastille « Jour N / 16 — Étape »
+  const sub=document.querySelector('.hero__sub');
+  if(sub){
+    const chip=document.createElement('div');
+    chip.className='hero__today';
+    chip.innerHTML=`🍁 <b>Jour ${day-10} / 16</b>&nbsp;— ${stage.querySelector('.stage__region').textContent}`;
+    sub.after(chip);
+  }
+  // Étape du jour : badge + marqueur nav + scroll doux
+  stage.classList.add('stage--today');
+  const rail=stage.querySelector('.stage__rail');
+  if(rail){ const b=document.createElement('span'); b.className='today-badge'; b.textContent='Aujourd’hui'; rail.appendChild(b); }
+  const jump=document.querySelector(`.jump[href="#${cur[0]}"]`);
+  if(jump) jump.classList.add('jump--today');
+  if(!location.hash) setTimeout(()=>stage.scrollIntoView({behavior:'smooth', block:'start'}), 600);
+})();
 
 // Hors connexion : service worker (cache complet du carnet + polices) et
 // masquage des mini-cartes Google (réseau requis). Les liens Organic Maps,

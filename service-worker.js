@@ -1,4 +1,4 @@
-const CACHE = 'roadtrip-v1';
+const CACHE = 'roadtrip-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -41,9 +41,10 @@ self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  // Never intercept Google Maps embeds — network or nothing.
+  // Never intercept Google Maps embeds or the live FX API — network or
+  // nothing (the page keeps its own localStorage fallback for the rate).
   if (url.hostname.includes('google.com') || url.hostname.includes('gstatic.com')
-   || url.hostname.includes('googleapis.com')) return;
+   || url.hostname.includes('googleapis.com') || url.hostname.includes('frankfurter')) return;
 
   const matchOpts = req.mode === 'navigate' ? { ignoreSearch: true } : undefined;
   e.respondWith(
