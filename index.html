@@ -732,26 +732,40 @@ const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.t
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
 // ---- Liens de lieux : Organic Maps (défaut) ou Google Maps ----
-// Chaque lien garde sa requête d'origine ; le sélecteur de la nav réécrit
-// les href. Organic Maps : schéma om://search (app hors-ligne, idéale roadtrip).
+// Le sélecteur de la nav réécrit les 48 liens ET leurs libellés. Un lien
+// om:// ne peut pas s'ouvrir via target=_blank ni depuis une iframe (iOS
+// l'ignore en silence) — au clic on navigue donc la fenêtre PRINCIPALE
+// (même origine quand la page est embarquée dans Bob).
 (function(){
   const KEY='maps-provider';
+  const NAME={om:'Organic Maps', g:'Google Maps'};
   const links=[...document.querySelectorAll('a[href^="https://www.google.com/maps/search"]')];
   links.forEach(a=>{
     try{ a.dataset.q=new URL(a.href).searchParams.get('query')||''; }catch{}
   });
+  let provider='om';
   function apply(p){
+    provider=p;
     links.forEach(a=>{
       if(!a.dataset.q) return;
       a.href = p==='om'
         ? 'om://search?query='+encodeURIComponent(a.dataset.q)
         : 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a.dataset.q);
-      if(p==='om') a.removeAttribute('target');
-      else a.setAttribute('target','_blank');
+      a.title='Voir sur '+NAME[p];
+      if(p==='om') a.removeAttribute('target'); else a.setAttribute('target','_blank');
+      // Libellés visibles « Ouvrir dans … » sous les mini-cartes
+      if(a.classList.contains('mapbox__link')) a.textContent='Ouvrir dans '+NAME[p]+' ↗';
     });
     document.querySelectorAll('.mapsel button').forEach(b=>b.classList.toggle('on',b.dataset.maps===p));
     try{ localStorage.setItem(KEY,p); }catch{}
   }
+  // om:// doit naviguer la fenêtre du HAUT (iframe iOS bloque sinon).
+  links.forEach(a=>a.addEventListener('click',(e)=>{
+    if(provider!=='om') return;
+    e.preventDefault();
+    try{ window.top.location.href=a.href; }
+    catch{ window.location.href=a.href; }
+  }));
   document.querySelectorAll('.mapsel button').forEach(b=>b.addEventListener('click',()=>apply(b.dataset.maps)));
   let saved='om';
   try{ saved=localStorage.getItem(KEY)||'om'; }catch{}
