@@ -317,13 +317,136 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var
   html{scroll-behavior:auto}
 }
 
-.car{offset-path:path('M 545,342 C 579.5,323.7 703.7,260.3 752,232 C 800.3,203.7 811.7,188.7 835,172 C 858.3,155.3 890.8,146.7 892,132 C 893.2,117.3 883.7,56.0 842,84 C 800.3,112.0 714.8,264.0 642,300 C 569.2,336.0 492.0,273.0 405,300 C 318.0,327.0 125.5,442.8 120,462 C 114.5,481.2 301.2,435.0 372,415 C 442.8,395.0 516.2,354.2 545,342 '); offset-rotate:0deg; animation:drive 22s linear infinite}</style>
+.car{offset-path:path('M 545,342 C 579.5,323.7 703.7,260.3 752,232 C 800.3,203.7 811.7,188.7 835,172 C 858.3,155.3 890.8,146.7 892,132 C 893.2,117.3 883.7,56.0 842,84 C 800.3,112.0 714.8,264.0 642,300 C 569.2,336.0 492.0,273.0 405,300 C 318.0,327.0 125.5,442.8 120,462 C 114.5,481.2 301.2,435.0 372,415 C 442.8,395.0 516.2,354.2 545,342 '); offset-rotate:0deg; animation:drive 22s linear infinite}
+
+/* ============ COMPAGNON DE ROUTE (tout hors-ligne) ============ */
+
+/* Dock de navigation */
+body{padding-bottom:92px}
+.dock{position:fixed; left:50%; transform:translateX(-50%); bottom:calc(10px + env(safe-area-inset-bottom));
+  z-index:30; display:flex; gap:2px; background:rgba(15,46,43,.93);
+  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  border-radius:999px; padding:5px; box-shadow:0 10px 30px rgba(15,46,43,.35); max-width:calc(100vw - 16px)}
+.dock a{display:flex; flex-direction:column; align-items:center; gap:1px; text-decoration:none;
+  color:#C9D8D3; font-family:"Space Mono",monospace; font-size:9px; letter-spacing:.02em;
+  padding:6px 10px; border-radius:999px; white-space:nowrap}
+.dock a span{font-size:16px; line-height:1.2}
+.dock a:active{background:rgba(255,255,255,.14); color:#fff}
+@media print{.dock{display:none} body{padding-bottom:0}}
+
+/* Carte Aujourd'hui / compte à rebours */
+.todaycard{background:var(--ink); color:#EDF3F0; border-radius:18px; padding:22px 24px;
+  box-shadow:var(--shadow); position:relative; overflow:hidden}
+.todaycard::after{content:"🍁"; position:absolute; right:-4px; top:-16px; font-size:96px; opacity:.13; transform:rotate(14deg)}
+.todaycard__k{font-family:"Space Mono",monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#9FC0B8}
+.todaycard__t{font-family:"Fraunces",serif; font-size:clamp(26px,5vw,38px); font-weight:600; margin:6px 0 2px; line-height:1.05}
+.todaycard__sub{font-size:14.5px; color:#C9D8D3; margin:0}
+.todaycard__rows{display:flex; flex-direction:column; gap:9px; margin-top:16px; position:relative; z-index:1}
+.todayrow{display:flex; gap:12px; font-size:14.5px; line-height:1.5; align-items:baseline}
+.todayrow b{font-family:"Space Mono",monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:#9FC0B8; flex:0 0 78px}
+.todaycard a{color:#fff}
+.countfacts{display:flex; gap:26px; margin-top:16px; flex-wrap:wrap; position:relative; z-index:1}
+.countfacts div b{font-family:"Fraunces",serif; font-size:clamp(30px,5vw,40px); font-weight:600; display:block; line-height:1}
+.countfacts div span{font-family:"Space Mono",monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:#9FC0B8}
+.todaycta{display:inline-block; margin-top:16px; font-family:"Space Mono",monospace; font-size:12.5px; font-weight:700;
+  color:var(--ink); background:#EDF3F0; border-radius:999px; padding:9px 16px; text-decoration:none; position:relative; z-index:1}
+.todaycard .todaycta{color:var(--ink)}
+
+/* Dépenses */
+.exp__amtrow{display:flex; gap:12px; align-items:flex-end}
+.exp__amt{flex:1; font-family:"Fraunces",serif; font-size:38px; font-weight:600; color:var(--ink);
+  border:0; border-bottom:2px solid var(--line); background:transparent; padding:0 0 2px; min-width:0; outline:none; border-radius:0}
+.exp__amt::placeholder{color:#B9C6C2}
+.exp__amt:focus{border-color:var(--amber)}
+.curtog,.seg2{display:inline-flex; border:1px solid var(--line); border-radius:999px; overflow:hidden; background:var(--paper)}
+.curtog button,.seg2 button{font-family:"Space Mono",monospace; font-size:12px; padding:8px 13px; border:0; background:transparent; color:var(--slate); cursor:pointer; white-space:nowrap}
+.curtog button.on,.seg2 button.on{background:var(--ink); color:#fff}
+.chiprow{display:flex; gap:7px; flex-wrap:wrap; margin-top:12px}
+.chippick{font-family:"Space Mono",monospace; font-size:12px; padding:7px 12px; border-radius:999px;
+  border:1px solid var(--line); background:var(--paper); color:var(--slate); cursor:pointer; white-space:nowrap}
+.chippick.on{background:var(--pine); border-color:var(--pine); color:#fff}
+.exp__note{font-family:inherit; font-size:15px; border:1px solid var(--line); border-radius:10px; padding:10px 12px; outline:none; width:100%; margin-top:12px; background:var(--paper); color:var(--ink)}
+.exp__note:focus{border-color:var(--amber)}
+.exp__add{font-family:"Space Mono",monospace; font-weight:700; font-size:14px; background:var(--amber); color:#fff;
+  border:0; border-radius:12px; padding:14px; cursor:pointer; letter-spacing:.05em; width:100%; margin-top:12px}
+.exp__add:active{transform:scale(.985)}
+.exp__tot{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap}
+.exp__totbig{font-family:"Fraunces",serif; font-weight:600; font-size:clamp(36px,6vw,50px); line-height:1}
+.exp__toteur{font-family:"Space Mono",monospace; font-size:14px; color:var(--slate)}
+.expbars{display:flex; flex-direction:column; gap:9px; margin-top:16px}
+.expbar{display:grid; grid-template-columns:118px 1fr auto; gap:10px; align-items:center}
+.expbar>span:first-child{font-family:"Space Mono",monospace; font-size:11.5px; color:var(--slate); white-space:nowrap}
+.expbar__track{height:8px; border-radius:4px; background:var(--line2); overflow:hidden}
+.expbar__track i{display:block; height:100%; background:var(--pine); border-radius:4px; transition:width .4s}
+.expbar b{font-family:"Space Mono",monospace; font-size:12px; white-space:nowrap}
+.expsplit{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px}
+.expsettle{font-size:14px; margin:12px 0 0; padding:11px 13px; border-radius:10px; background:var(--amber-soft); border:1px solid #ecd4b3; line-height:1.5}
+.explist{list-style:none; margin:6px 0 0; padding:0}
+.explist li{display:flex; gap:10px; align-items:baseline; padding:9px 0; border-bottom:1px solid var(--line2); font-size:14.5px}
+.explist .ecat{flex:0 0 auto}
+.explist .enote{min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.explist .ewho{font-family:"Space Mono",monospace; font-size:10px; color:var(--slate); text-transform:uppercase}
+.explist .eamt{margin-left:auto; font-family:"Space Mono",monospace; font-weight:700; white-space:nowrap}
+.explist .edel{border:0; background:none; color:var(--red); cursor:pointer; font-size:15px; padding:0 2px; line-height:1}
+.expday{font-family:"Space Mono",monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--pine); padding:16px 0 3px}
+.expempty{font-size:14px; font-style:italic; color:var(--slate); margin:10px 0 0}
+.expcopy{font-family:"Space Mono",monospace; font-size:12px; border:1px solid var(--line); background:var(--paper); color:var(--slate); border-radius:999px; padding:7px 13px; cursor:pointer; margin-top:14px}
+
+/* Checklists */
+.lists{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+@media (max-width:900px){.lists{grid-template-columns:1fr}}
+.cbar{height:6px; background:var(--line2); border-radius:3px; margin:10px 0 4px; overflow:hidden}
+.cbar i{display:block; height:100%; background:var(--green); border-radius:3px; transition:width .3s}
+.cprog{font-family:"Space Mono",monospace; font-size:11px; color:var(--slate)}
+.citems{list-style:none; margin:8px 0 0; padding:0}
+.citem{display:flex; align-items:center; gap:11px; padding:8px 0; border-bottom:1px solid var(--line2); font-size:14.5px; cursor:pointer; line-height:1.4}
+.citem input{appearance:none; -webkit-appearance:none; width:20px; height:20px; border:2px solid var(--pine); border-radius:6px; flex:0 0 auto; cursor:pointer; position:relative; margin:0; background:var(--paper)}
+.citem input:checked{background:var(--pine)}
+.citem input:checked::after{content:"✓"; color:#fff; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700}
+.citem.done span{text-decoration:line-through; color:var(--slate)}
+.citem .cdel{margin-left:auto; border:0; background:none; color:var(--line); cursor:pointer; font-size:14px; padding:0 2px}
+.citem .cdel:hover{color:var(--red)}
+.cadd{display:flex; gap:8px; margin-top:12px}
+.cadd input{flex:1; font-family:inherit; font-size:14px; border:1px solid var(--line); border-radius:10px; padding:8px 11px; outline:none; min-width:0; background:var(--paper); color:var(--ink)}
+.cadd input:focus{border-color:var(--amber)}
+.cadd button{font-family:"Space Mono",monospace; font-size:16px; border:1px solid var(--line); background:var(--paper); color:var(--pine); border-radius:10px; width:38px; cursor:pointer}
+
+/* Journal */
+.jday{background:var(--paper); border:1px solid var(--line2); border-radius:14px; padding:0; margin-bottom:10px; box-shadow:var(--shadow)}
+.jday summary{list-style:none; cursor:pointer; display:flex; align-items:baseline; gap:12px; padding:14px 16px}
+.jday summary::-webkit-details-marker{display:none}
+.jday__n{font-family:"Space Mono",monospace; font-weight:700; font-size:12px; color:#fff; background:var(--pine); border-radius:8px; padding:3px 9px; white-space:nowrap}
+.jday--today .jday__n{background:var(--amber)}
+.jday__r{font-family:"Fraunces",serif; font-weight:600; font-size:17px}
+.jday__hint{margin-left:auto; font-size:15px; opacity:.75; white-space:nowrap}
+.jday__body{padding:0 16px 14px}
+.jday textarea{width:100%; border:0; background:transparent; font-family:inherit; font-size:15.5px; line-height:1.6; resize:vertical; min-height:72px; outline:none; color:var(--ink)}
+.jday textarea::placeholder{color:#B9C6C2; font-style:italic}
+.moods{display:flex; gap:4px; padding-top:6px; border-top:1px dashed var(--line2)}
+.mood{border:0; background:transparent; font-size:21px; cursor:pointer; opacity:.3; padding:3px 5px; transition:transform .15s,opacity .15s}
+.mood.on{opacity:1; transform:scale(1.18)}
+.jexport{font-family:"Space Mono",monospace; font-size:12px; border:1px solid var(--line); background:var(--paper); color:var(--slate); border-radius:999px; padding:7px 13px; cursor:pointer; margin-top:6px}
+
+/* Convertisseur + taxes */
+.conv__row{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap}
+.conv__in{width:130px; font-family:"Fraunces",serif; font-size:30px; font-weight:600; color:var(--ink);
+  border:0; border-bottom:2px solid var(--line); background:transparent; padding:0 0 2px; outline:none; border-radius:0}
+.conv__in:focus{border-color:var(--amber)}
+.conv__eq{font-family:"Fraunces",serif; font-size:clamp(24px,4vw,30px); font-weight:600; color:var(--pine)}
+.conv__unit{font-family:"Space Mono",monospace; font-size:12px; color:var(--slate)}
+.conv__swap{border:1px solid var(--line); background:var(--paper); border-radius:999px; font-size:15px; width:34px; height:34px; cursor:pointer; color:var(--slate)}
+.taxout{margin-top:14px; padding-top:12px; border-top:1px solid var(--line2); display:flex; flex-direction:column; gap:5px}
+.taxout div{display:flex; justify-content:space-between; font-size:14px}
+.taxout div span:last-child{font-family:"Space Mono",monospace}
+.taxout .big{font-weight:700}
+.taxout .big span:last-child{font-family:"Fraunces",serif; font-size:22px; color:var(--amber)}
+.taxhint{font-size:12.5px; color:var(--slate); margin:10px 0 0; font-style:italic}</style>
 </head>
 <body>
 
 <nav class="topnav"><div class="topnav__in">
   <span class="topnav__brand">🍁 Canada · Août</span>
-  <a href="#montreal" class="jump">Montréal</a><a href="#quebec" class="jump">Québec</a><a href="#charlevoix" class="jump">Charlevoix</a><a href="#tadoussac" class="jump">Tadoussac</a><a href="#fjord" class="jump">Fjord du Saguenay</a><a href="#trois-rivieres" class="jump">Trois-Rivières</a><a href="#ottawa" class="jump">Ottawa</a><a href="#toronto" class="jump">Toronto</a><a href="#gananoque" class="jump">Mille-Îles</a><a href="#retour" class="jump">Retour</a><a href="#memo" class="jump">Sur place</a><a href="#prix" class="jump">Budget</a>
+  <a href="#montreal" class="jump">Montréal</a><a href="#quebec" class="jump">Québec</a><a href="#charlevoix" class="jump">Charlevoix</a><a href="#tadoussac" class="jump">Tadoussac</a><a href="#fjord" class="jump">Fjord du Saguenay</a><a href="#trois-rivieres" class="jump">Trois-Rivières</a><a href="#ottawa" class="jump">Ottawa</a><a href="#toronto" class="jump">Toronto</a><a href="#gananoque" class="jump">Mille-Îles</a><a href="#retour" class="jump">Retour</a><a href="#memo" class="jump">Sur place</a><a href="#depenses" class="jump">Dépenses</a><a href="#listes" class="jump">Listes</a><a href="#journal" class="jump">Journal</a><a href="#prix" class="jump">Budget</a>
   <span class="offchip" aria-live="polite">Hors ligne</span>
   <span class="mapsel" role="group" aria-label="Application de cartes pour les liens">
     <button type="button" data-maps="om">Organic</button>
@@ -382,6 +505,8 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var
 </div></header>
 
 <main class="wrap">
+  <section id="aujourdhui" aria-live="polite" style="margin-top:26px"></section>
+
   <div class="shead"><span class="shead__k">Jour par jour</span><h2>L'itinéraire</h2></div>
   <div class="timeline">
     <section class="stage reveal" id="montreal">
@@ -793,7 +918,76 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var
         <li><b>Réseau</b><span>Ce carnet et Organic Maps marchent hors connexion — le Wi-Fi des hôtels suffit pour le reste.</span></li>
       </ul>
     </div>
+    <div class="panel">
+      <h3>Convertisseur</h3>
+      <div class="conv__row">
+        <input class="conv__in" id="convIn" type="text" inputmode="decimal" placeholder="100" aria-label="Montant à convertir">
+        <span class="conv__unit" id="convFrom">CAD</span>
+        <button class="conv__swap" id="convSwap" type="button" aria-label="Inverser le sens">⇅</button>
+        <span class="conv__eq" id="convOut">—</span>
+        <span class="conv__unit" id="convTo">EUR</span>
+      </div>
+      <p class="taxhint" id="convHint">Au taux affiché ci-contre — fonctionne hors connexion (dernier taux mémorisé).</p>
+    </div>
+    <div class="panel">
+      <h3>Le vrai prix (taxes + pourboire)</h3>
+      <div class="conv__row">
+        <input class="conv__in" id="taxIn" type="text" inputmode="decimal" placeholder="50" aria-label="Prix affiché en CAD">
+        <span class="conv__unit">CAD affiché</span>
+      </div>
+      <div class="chiprow">
+        <span class="seg2" role="group" aria-label="Province"><button type="button" data-prov="qc" class="on">Québec +14,975 %</button><button type="button" data-prov="on">Ontario +13 %</button></span>
+      </div>
+      <div class="chiprow">
+        <span class="seg2" role="group" aria-label="Pourboire"><button type="button" data-tip="0">Sans pourboire</button><button type="button" data-tip="15" class="on">15 %</button><button type="button" data-tip="18">18 %</button><button type="button" data-tip="20">20 %</button></span>
+      </div>
+      <div class="taxout" id="taxOut" hidden>
+        <div><span>Taxes</span><span id="taxTaxes">—</span></div>
+        <div><span>Pourboire (sur le hors-taxes)</span><span id="taxTip">—</span></div>
+        <div class="big"><span>Tu paieras</span><span id="taxTotal">—</span></div>
+        <div><span>Soit en euros</span><span id="taxEur">—</span></div>
+      </div>
+      <p class="taxhint">Au resto, le pourboire se calcule sur le montant <em>avant taxes</em>.</p>
+    </div>
   </div>
+
+  <div class="shead" id="depenses"><span class="shead__k">Sur place</span><h2>Les dépenses</h2></div>
+  <div class="memo">
+    <div class="panel">
+      <h3>Ajouter une dépense</h3>
+      <div class="exp__amtrow">
+        <input class="exp__amt" id="expAmt" type="text" inputmode="decimal" placeholder="0" aria-label="Montant">
+        <span class="curtog" role="group" aria-label="Devise"><button type="button" data-cur="cad" class="on">CAD</button><button type="button" data-cur="eur">EUR</button></span>
+      </div>
+      <div class="chiprow" id="expCats" role="group" aria-label="Catégorie"></div>
+      <div class="chiprow" id="expPayers" role="group" aria-label="Qui a payé"></div>
+      <input class="exp__note" id="expNote" type="text" placeholder="Note (poutine, plein d'essence…)" maxlength="80">
+      <button class="exp__add" id="expAdd" type="button">AJOUTER</button>
+    </div>
+    <div class="panel">
+      <h3>Où en est-on ?</h3>
+      <div class="exp__tot"><span class="exp__totbig" id="expTot">0 $</span><span class="exp__toteur" id="expTotEur"></span></div>
+      <div class="expbars" id="expBars"></div>
+      <div class="expsplit">
+        <div class="split__card split__card--nicolas"><span>Nicolas a payé</span><b id="expN">0 $</b></div>
+        <div class="split__card split__card--brandon"><span>🐻 Brandon a payé</span><b id="expB">0 $</b></div>
+      </div>
+      <div id="expSettle"></div>
+      <button class="expcopy" id="expCopy" type="button">Copier le récap 📋</button>
+    </div>
+  </div>
+  <div class="panel" style="margin-top:16px">
+    <h3>Le fil des dépenses</h3>
+    <div id="expList"><p class="expempty">Rien pour l'instant — la première poutine se fera un plaisir d'inaugurer la liste.</p></div>
+  </div>
+
+  <div class="shead" id="listes"><span class="shead__k">Préparation</span><h2>Les listes</h2></div>
+  <div class="lists" id="listsRoot"></div>
+
+  <div class="shead" id="journal"><span class="shead__k">Souvenirs</span><h2>Le journal de bord</h2></div>
+  <p style="margin:-8px 0 16px; color:var(--slate); font-size:14.5px">Deux lignes chaque soir suffisent — dans un an, c'est ce carnet que tu reliras.</p>
+  <div id="journalRoot"></div>
+  <button class="jexport" id="jExport" type="button">Copier tout le journal 📋</button>
 
   <div class="shead" id="prix"><span class="shead__k">Le budget</span><h2>Récap des prix</h2></div>
 
@@ -816,6 +1010,15 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var
   </footer>
 </main>
 
+<nav class="dock" aria-label="Raccourcis du carnet">
+  <a href="#aujourdhui"><span>🍁</span>Jour</a>
+  <a href="#montreal"><span>🗺️</span>Route</a>
+  <a href="#depenses"><span>💸</span>Dépenses</a>
+  <a href="#listes"><span>✅</span>Listes</a>
+  <a href="#journal"><span>✍️</span>Journal</a>
+  <a href="#memo"><span>🧮</span>Outils</a>
+</nav>
+
 <script>
 const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
@@ -831,6 +1034,8 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
   if(!rateEl) return;
   function fr(n,d){ return n.toFixed(d).replace('.', ','); }
   function render(rate, date, cached){
+    window.__fxRate = rate;   // partagé avec dépenses / convertisseur / taxes
+    document.dispatchEvent(new CustomEvent('fx', {detail:{rate}}));
     rateEl.textContent = fr(rate,4);
     stampEl.textContent = (cached ? 'hors ligne · ' : 'BCE · ') +
       new Date(date+'T12:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'short'});
@@ -885,7 +1090,7 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
   if(rail){ const b=document.createElement('span'); b.className='today-badge'; b.textContent='Aujourd’hui'; rail.appendChild(b); }
   const jump=document.querySelector(`.jump[href="#${cur[0]}"]`);
   if(jump) jump.classList.add('jump--today');
-  if(!location.hash) setTimeout(()=>stage.scrollIntoView({behavior:'smooth', block:'start'}), 600);
+  // (pas d'auto-scroll : la carte « Aujourd'hui » en haut de page fait le travail)
 })();
 
 // Hors connexion : service worker (cache complet du carnet + polices) et
@@ -957,6 +1162,328 @@ if ('serviceWorker' in navigator) {
   let saved='om';
   try{ saved=localStorage.getItem(KEY)||'om'; }catch{}
   apply(saved);
+})();
+
+// ============ COMPAGNON DE ROUTE — tout fonctionne hors connexion ============
+// Données locales uniquement (localStorage). Le taux de change utilise le
+// dernier taux mémorisé (window.__fxRate) avec 1,6148 en filet de sécurité.
+
+const TRIP=[['montreal',11,13],['quebec',14,15],['charlevoix',16,16],['tadoussac',17,18],
+  ['fjord',19,19],['trois-rivieres',20,20],['ottawa',21,21],['toronto',22,24],
+  ['gananoque',25,25],['retour',26,26]];
+const fxRate=()=>window.__fxRate||1.6148;
+const store={
+  get(k,fb){ try{ return JSON.parse(localStorage.getItem(k)||'null') ?? fb; }catch{ return fb; } },
+  set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch{} },
+};
+const fr1=(n,d=2)=>n.toLocaleString('fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d});
+const esc=(s)=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function tripDay(){
+  const now=new Date();
+  if(now.getFullYear()!==2026) return null;
+  if(now.getMonth()===7 && now.getDate()>=11 && now.getDate()<=26) return now.getDate();
+  return null;
+}
+
+// ---- Aujourd'hui : compte à rebours avant, carte du jour pendant ----
+(function(){
+  const root=document.getElementById('aujourdhui');
+  if(!root) return;
+  const now=new Date();
+  const depart=new Date(2026,7,11);
+  const day=tripDay();
+  function stageInfo(id){
+    const el=document.getElementById(id);
+    if(!el) return {};
+    return {
+      region:el.querySelector('.stage__region')?.textContent||'',
+      titre:el.querySelector('.stage__title')?.textContent||'',
+      trajet:el.querySelector('.stage__trajet')?.textContent||'',
+      lodge:el.querySelector('.lodge__name')?.textContent||'',
+      addr:el.querySelector('.lodge__addr')?.textContent.replace('📍','').trim()||'',
+    };
+  }
+  if(day){
+    const cur=TRIP.find(([,a,b])=>day>=a&&day<=b);
+    const idx=TRIP.indexOf(cur);
+    const s=stageInfo(cur[0]);
+    const nextStage=TRIP[idx+1] && day===cur[2] ? stageInfo(TRIP[idx+1][0]) : null;
+    root.innerHTML=`<div class="todaycard">
+      <div class="todaycard__k">Jour ${day-10} / 16 · ${now.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})}</div>
+      <div class="todaycard__t">${esc(s.titre)}</div>
+      <div class="todaycard__rows">
+        ${s.trajet?`<div class="todayrow"><b>Programme</b><span>${esc(s.trajet)}</span></div>`:''}
+        ${s.lodge?`<div class="todayrow"><b>Ce soir</b><span>${esc(s.lodge)}${s.addr?' — '+esc(s.addr):''}</span></div>`:''}
+        ${nextStage&&nextStage.region?`<div class="todayrow"><b>Demain</b><span>${esc(nextStage.region)}${nextStage.trajet?' · '+esc(nextStage.trajet.replace('🚗','').trim()):''}</span></div>`:''}
+        ${day===26?`<div class="todayrow"><b>⚠️ Ce soir</b><span>Voiture rendue à YUL pour 18 h (plein fait !), vol pour Paris à 22 h.</span></div>`:''}
+      </div>
+      <a class="todaycta" href="#${cur[0]}">Voir l'étape complète ↓</a>
+    </div>`;
+  } else if(now<depart){
+    const jj=Math.ceil((depart-now)/86400000);
+    const checks=store.get('canada-check-v1',null);
+    let done=0,total=0;
+    if(checks){ Object.values(checks).forEach(list=>list.forEach(i=>{ total++; if(i.done) done++; })); }
+    root.innerHTML=`<div class="todaycard">
+      <div class="todaycard__k">Compte à rebours</div>
+      <div class="todaycard__t">J − ${jj}</div>
+      <p class="todaycard__sub">Décollage le 11 août — Montréal t'attend, Brandon relit la section ours.</p>
+      <div class="countfacts">
+        <div><b>${jj}</b><span>jour${jj>1?'s':''} restant${jj>1?'s':''}</span></div>
+        <div><b>16</b><span>jours sur place</span></div>
+        ${total?`<div><b>${done}/${total}</b><span>préparatifs cochés</span></div>`:''}
+      </div>
+      <a class="todaycta" href="#listes">Préparer le départ ↓</a>
+    </div>`;
+  } else {
+    root.innerHTML=`<div class="todaycard">
+      <div class="todaycard__k">De retour</div>
+      <div class="todaycard__t">C'était beau, hein ?</div>
+      <p class="todaycard__sub">Le journal de bord et les dépenses sont toujours là, bien au chaud. Brandon a survécu — la légende est en marche.</p>
+      <a class="todaycta" href="#journal">Relire le journal ↓</a>
+    </div>`;
+  }
+})();
+
+// ---- Dépenses : saisie rapide en CAD/EUR, split Nicolas / Brandon ----
+(function(){
+  const KEY='canada-exp-v1';
+  const CATS=[['resto','🍔 Resto'],['essence','⛽ Essence'],['act','🎟️ Activités'],['course','🛒 Courses'],['autre','🛍️ Autre']];
+  const PAYERS=[['n','Nicolas'],['b','🐻 Brandon']];
+  let exps=store.get(KEY,[]);
+  let cur='cad', cat='resto', payer='n';
+  const $=id=>document.getElementById(id);
+  if(!$('expAdd')) return;
+
+  $('expCats').innerHTML=CATS.map(([k,l])=>`<button type="button" class="chippick${k===cat?' on':''}" data-k="${k}">${l}</button>`).join('');
+  $('expPayers').innerHTML=PAYERS.map(([k,l])=>`<button type="button" class="chippick${k===payer?' on':''}" data-k="${k}">${l} a payé</button>`).join('');
+  $('expCats').addEventListener('click',e=>{ const b=e.target.closest('[data-k]'); if(!b) return; cat=b.dataset.k;
+    $('expCats').querySelectorAll('.chippick').forEach(x=>x.classList.toggle('on',x===b)); });
+  $('expPayers').addEventListener('click',e=>{ const b=e.target.closest('[data-k]'); if(!b) return; payer=b.dataset.k;
+    $('expPayers').querySelectorAll('.chippick').forEach(x=>x.classList.toggle('on',x===b)); });
+  document.querySelectorAll('.curtog [data-cur]').forEach(b=>b.addEventListener('click',()=>{ cur=b.dataset.cur;
+    document.querySelectorAll('.curtog [data-cur]').forEach(x=>x.classList.toggle('on',x===b)); }));
+
+  $('expAdd').addEventListener('click',()=>{
+    const raw=parseFloat(($('expAmt').value||'').replace(',','.'));
+    if(!raw || raw<=0){ $('expAmt').focus(); return; }
+    const amtCAD=cur==='cad'?raw:raw*fxRate();
+    exps.push({ id:Date.now().toString(36), cad:Math.round(amtCAD*100)/100, cat, payer,
+      note:($('expNote').value||'').trim(), date:new Date().toISOString().slice(0,10) });
+    store.set(KEY,exps);
+    $('expAmt').value=''; $('expNote').value='';
+    renderExp();
+  });
+  $('expCopy').addEventListener('click',()=>{
+    const tot=exps.reduce((a,e)=>a+e.cad,0);
+    const n=exps.filter(e=>e.payer==='n').reduce((a,e)=>a+e.cad,0);
+    const b=tot-n;
+    const lines=['🍁 Dépenses Canada — '+fr1(tot)+' CAD (≈ '+fr1(tot/fxRate())+' €)','Nicolas : '+fr1(n)+' CAD · Brandon : '+fr1(b)+' CAD',''];
+    exps.forEach(e=>lines.push(e.date.slice(5)+' · '+(CATS.find(c=>c[0]===e.cat)?.[1]||e.cat)+' · '+fr1(e.cad)+' $ ('+(e.payer==='n'?'Nicolas':'Brandon')+')'+(e.note?' — '+e.note:'')));
+    navigator.clipboard?.writeText(lines.join('\n')).then(()=>{ $('expCopy').textContent='Copié ✓'; setTimeout(()=>$('expCopy').textContent='Copier le récap 📋',1600); }).catch(()=>{});
+  });
+
+  function renderExp(){
+    const tot=exps.reduce((a,e)=>a+e.cad,0);
+    const paidN=exps.filter(e=>e.payer==='n').reduce((a,e)=>a+e.cad,0);
+    const paidB=tot-paidN;
+    $('expTot').textContent=fr1(tot)+' $';
+    $('expTotEur').textContent=tot?('≈ '+fr1(tot/fxRate())+' € au taux du jour'):'';
+    $('expN').textContent=fr1(paidN)+' $';
+    $('expB').textContent=fr1(paidB)+' $';
+    const delta=(paidN-paidB)/2;
+    $('expSettle').innerHTML = tot===0 ? '' :
+      Math.abs(delta)<1 ? '<div class="expsettle">⚖️ Parfaitement équilibré, comme toutes choses devraient l\'être.</div>' :
+      `<div class="expsettle">${delta>0?'🐻 Brandon doit <b>'+fr1(Math.abs(delta))+' $</b> à Nicolas':'Nicolas doit <b>'+fr1(Math.abs(delta))+' $</b> à Brandon'} pour équilibrer (moitié-moitié).</div>`;
+    // barres par catégorie
+    const byCat=CATS.map(([k,l])=>[l,exps.filter(e=>e.cat===k).reduce((a,e)=>a+e.cad,0)]).filter(([,v])=>v>0);
+    const max=Math.max(1,...byCat.map(([,v])=>v));
+    $('expBars').innerHTML=byCat.map(([l,v])=>`<div class="expbar"><span>${l}</span><span class="expbar__track"><i style="width:${Math.round(v/max*100)}%"></i></span><b>${fr1(v,0)} $</b></div>`).join('');
+    // fil groupé par jour (récent en premier)
+    if(!exps.length){ $('expList').innerHTML='<p class="expempty">Rien pour l\'instant — la première poutine se fera un plaisir d\'inaugurer la liste.</p>'; return; }
+    const days=[...new Set(exps.map(e=>e.date))].sort().reverse();
+    $('expList').innerHTML=days.map(d=>{
+      const dayExps=exps.filter(e=>e.date===d).slice().reverse();
+      const sum=dayExps.reduce((a,e)=>a+e.cad,0);
+      const lbl=new Date(d+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
+      return `<div class="expday">${lbl} — ${fr1(sum,0)} $</div><ul class="explist">`+
+        dayExps.map(e=>`<li><span class="ecat">${(CATS.find(c=>c[0]===e.cat)?.[1]||'🛍️').split(' ')[0]}</span><span class="enote">${esc(e.note)||(CATS.find(c=>c[0]===e.cat)?.[1].split(' ').slice(1).join(' '))}</span><span class="ewho">${e.payer==='n'?'N':'🐻'}</span><span class="eamt">${fr1(e.cad)} $</span><button class="edel" data-del="${e.id}" aria-label="Supprimer">✕</button></li>`).join('')+'</ul>';
+    }).join('');
+    $('expList').querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>{
+      exps=exps.filter(e=>e.id!==b.dataset.del);
+      store.set(KEY,exps);
+      renderExp();
+    }));
+  }
+  renderExp();
+})();
+
+// ---- Listes de préparation (pré-remplies, modifiables, cochables) ----
+(function(){
+  const KEY='canada-check-v1';
+  const DEFAULTS={
+    documents:{t:'📄 Documents',items:['AVE / eTA (obligatoire, ~7 $CA, en ligne AVANT de partir)','Passeport (validité OK)','Permis de conduire','Réservation Avis + vouchers hôtels (captures d\'écran)','Carte bancaire sans frais à l\'étranger','Billets d\'avion (check-in J-1)','Assurance voyage / carte']},
+    valise:{t:'🎒 La valise',items:['Coupe-vent chaud — 12 °C en mer à Tadoussac, même en août','Jumelles pour les baleines 🐋','Anti-moustiques (le fjord pique)','Crème solaire + casquette','Chaussures de marche','Maillot de bain','Adaptateur prises type A/B','Batterie externe + câble USB voiture','Pharmacie de poche']},
+    avant:{t:'✈️ Avant de partir',items:['Télécharger les cartes Organic Maps : Québec + Ontario 🔑','Ouvrir ce carnet une fois en ligne (il se met en cache)','Décider eSIM ou roaming','Prévenir la banque du voyage','Playlists & podcasts téléchargés pour les 2 400 km','Vider la mémoire du téléphone (place aux photos)','Laisser l\'itinéraire à un proche']},
+  };
+  const root=document.getElementById('listsRoot');
+  if(!root) return;
+  let data=store.get(KEY,null);
+  if(!data){
+    data={};
+    Object.entries(DEFAULTS).forEach(([k,v])=>{ data[k]=v.items.map((label,i)=>({id:k+i,label,done:false})); });
+    store.set(KEY,data);
+  }
+  function render(){
+    root.innerHTML=Object.entries(DEFAULTS).map(([k,v])=>{
+      const items=data[k]||[];
+      const done=items.filter(i=>i.done).length;
+      return `<div class="panel clist" data-list="${k}">
+        <h3>${v.t}</h3>
+        <div class="cbar"><i style="width:${items.length?Math.round(done/items.length*100):0}%"></i></div>
+        <div class="cprog">${done} / ${items.length}</div>
+        <ul class="citems">${items.map(i=>`<li class="citem${i.done?' done':''}"><input type="checkbox" data-id="${i.id}" ${i.done?'checked':''} aria-label="${esc(i.label)}"><span>${esc(i.label)}</span><button class="cdel" data-del="${i.id}" aria-label="Supprimer">✕</button></li>`).join('')}</ul>
+        <div class="cadd"><input type="text" placeholder="Ajouter…" maxlength="90"><button type="button" aria-label="Ajouter">+</button></div>
+      </div>`;
+    }).join('');
+    root.querySelectorAll('.clist').forEach(panel=>{
+      const k=panel.dataset.list;
+      panel.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.addEventListener('change',()=>{
+        const it=data[k].find(i=>i.id===cb.dataset.id);
+        if(it){ it.done=cb.checked; store.set(KEY,data); render(); }
+      }));
+      panel.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>{
+        data[k]=data[k].filter(i=>i.id!==b.dataset.del);
+        store.set(KEY,data); render();
+      }));
+      const inp=panel.querySelector('.cadd input'), add=panel.querySelector('.cadd button');
+      const doAdd=()=>{ const v=(inp.value||'').trim(); if(!v) return;
+        data[k].push({id:k+Date.now().toString(36),label:v,done:false});
+        store.set(KEY,data); render(); };
+      add.addEventListener('click',doAdd);
+      inp.addEventListener('keydown',e=>{ if(e.key==='Enter') doAdd(); });
+    });
+  }
+  render();
+})();
+
+// ---- Journal de bord : une entrée par jour, humeur + texte, autosave ----
+(function(){
+  const KEY='canada-journal-v1';
+  const MOODS=['🤩','🙂','😮','🥶','😴'];
+  const root=document.getElementById('journalRoot');
+  if(!root) return;
+  let data=store.get(KEY,{});
+  const today=tripDay();
+  const regionOf=(d)=>{ const s=TRIP.find(([,a,b])=>d>=a&&d<=b); if(!s) return '';
+    return document.getElementById(s[0])?.querySelector('.stage__region')?.textContent||''; };
+  root.innerHTML=Array.from({length:16},(_,i)=>{
+    const d=11+i;
+    const e=data['d'+d]||{};
+    const isToday=today===d;
+    return `<details class="jday${isToday?' jday--today':''}" data-d="${d}" ${isToday?'open':''}>
+      <summary>
+        <span class="jday__n">J${i+1} · ${d} août</span>
+        <span class="jday__r">${esc(regionOf(d))}</span>
+        <span class="jday__hint">${e.mood||(e.text?'✍️':'')}</span>
+      </summary>
+      <div class="jday__body">
+        <textarea placeholder="Le moment du jour, une odeur, une phrase de Brandon…" data-d="${d}">${esc(e.text||'')}</textarea>
+        <div class="moods">${MOODS.map(m=>`<button type="button" class="mood${e.mood===m?' on':''}" data-m="${m}">${m}</button>`).join('')}</div>
+      </div>
+    </details>`;
+  }).join('');
+  root.querySelectorAll('textarea').forEach(t=>{
+    let timer=null;
+    t.addEventListener('input',()=>{
+      clearTimeout(timer);
+      timer=setTimeout(()=>{
+        const d='d'+t.dataset.d;
+        data[d]=data[d]||{};
+        data[d].text=t.value;
+        store.set(KEY,data);
+        const det=t.closest('.jday');
+        const hint=det.querySelector('.jday__hint');
+        if(hint && !data[d].mood) hint.textContent=t.value.trim()?'✍️':'';
+      },400);
+    });
+  });
+  root.querySelectorAll('.mood').forEach(b=>b.addEventListener('click',()=>{
+    const det=b.closest('.jday');
+    const d='d'+det.dataset.d;
+    data[d]=data[d]||{};
+    data[d].mood = data[d].mood===b.dataset.m ? '' : b.dataset.m;
+    store.set(KEY,data);
+    det.querySelectorAll('.mood').forEach(x=>x.classList.toggle('on',x.dataset.m===data[d].mood));
+    det.querySelector('.jday__hint').textContent=data[d].mood||(data[d].text?'✍️':'');
+  }));
+  document.getElementById('jExport')?.addEventListener('click',()=>{
+    const btn=document.getElementById('jExport');
+    const lines=['🍁 Journal de bord — Canada, août 2026',''];
+    for(let d=11;d<=26;d++){
+      const e=data['d'+d];
+      if(!e||(!e.text&&!e.mood)) continue;
+      lines.push(`Jour ${d-10} · ${d} août — ${regionOf(d)} ${e.mood||''}`.trim());
+      if(e.text) lines.push(e.text.trim());
+      lines.push('');
+    }
+    navigator.clipboard?.writeText(lines.join('\n')).then(()=>{ btn.textContent='Copié ✓'; setTimeout(()=>btn.textContent='Copier tout le journal 📋',1600); }).catch(()=>{});
+  });
+})();
+
+// ---- Convertisseur CAD ⇄ EUR (taux mémorisé = OK hors connexion) ----
+(function(){
+  const inEl=document.getElementById('convIn');
+  if(!inEl) return;
+  const outEl=document.getElementById('convOut');
+  const fromEl=document.getElementById('convFrom'), toEl=document.getElementById('convTo');
+  let sens='cad2eur';
+  function calc(){
+    const v=parseFloat((inEl.value||'').replace(',','.'));
+    if(!v){ outEl.textContent='—'; return; }
+    outEl.textContent = sens==='cad2eur' ? fr1(v/fxRate()) : fr1(v*fxRate());
+  }
+  inEl.addEventListener('input',calc);
+  document.getElementById('convSwap').addEventListener('click',()=>{
+    sens = sens==='cad2eur' ? 'eur2cad' : 'cad2eur';
+    fromEl.textContent = sens==='cad2eur' ? 'CAD' : 'EUR';
+    toEl.textContent = sens==='cad2eur' ? 'EUR' : 'CAD';
+    calc();
+  });
+  document.addEventListener('fx',calc);
+})();
+
+// ---- Le vrai prix : taxes provinciales + pourboire ----
+(function(){
+  const inEl=document.getElementById('taxIn');
+  if(!inEl) return;
+  let prov='qc', tip=15;
+  const TAX={qc:0.14975,on:0.13};
+  function calc(){
+    const v=parseFloat((inEl.value||'').replace(',','.'));
+    const out=document.getElementById('taxOut');
+    if(!v){ out.hidden=true; return; }
+    const taxes=v*TAX[prov];
+    const tipAmt=v*tip/100;
+    const total=v+taxes+tipAmt;
+    out.hidden=false;
+    document.getElementById('taxTaxes').textContent='+ '+fr1(taxes)+' $';
+    document.getElementById('taxTip').textContent=tip?('+ '+fr1(tipAmt)+' $'):'—';
+    document.getElementById('taxTotal').textContent=fr1(total)+' $';
+    document.getElementById('taxEur').textContent='≈ '+fr1(total/fxRate())+' €';
+  }
+  inEl.addEventListener('input',calc);
+  document.querySelectorAll('[data-prov]').forEach(b=>b.addEventListener('click',()=>{
+    prov=b.dataset.prov;
+    document.querySelectorAll('[data-prov]').forEach(x=>x.classList.toggle('on',x===b));
+    calc();
+  }));
+  document.querySelectorAll('[data-tip]').forEach(b=>b.addEventListener('click',()=>{
+    tip=Number(b.dataset.tip);
+    document.querySelectorAll('[data-tip]').forEach(x=>x.classList.toggle('on',x===b));
+    calc();
+  }));
+  document.addEventListener('fx',calc);
 })();
 </script>
 </body>
