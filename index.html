@@ -1268,8 +1268,11 @@ function tripDay(){
     const raw=parseFloat(($('expAmt').value||'').replace(',','.'));
     if(!raw || raw<=0){ $('expAmt').focus(); return; }
     const amtCAD=cur==='cad'?raw:raw*fxRate();
+    // date LOCALE (pas UTC) : à 21 h à Toronto, la dépense reste sur le bon jour
+    const d=new Date();
+    const localDate=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
     exps.push({ id:Date.now().toString(36), cad:Math.round(amtCAD*100)/100, cat, payer,
-      note:($('expNote').value||'').trim(), date:new Date().toISOString().slice(0,10) });
+      note:($('expNote').value||'').trim(), date:localDate });
     store.set(KEY,exps);
     $('expAmt').value=''; $('expNote').value='';
     renderExp();
