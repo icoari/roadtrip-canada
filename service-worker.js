@@ -1,4 +1,4 @@
-const CACHE = 'roadtrip-v6';
+const CACHE = 'roadtrip-v5';
 const ASSETS = [
   './',
   './index.html',
